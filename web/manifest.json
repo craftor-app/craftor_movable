@@ -1,6 +1,6 @@
 {
-    "name": "craftor_moveable",
-    "short_name": "craftor_moveable",
+    "name": "craftor_movable",
+    "short_name": "craftor_movable",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

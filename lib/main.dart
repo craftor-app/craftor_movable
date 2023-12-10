@@ -1,5 +1,5 @@
-import 'package:craftor_moveable/models/interactive_box_info.dart';
-import 'package:craftor_moveable/moveable.dart';
+import 'package:craftor_movable/models/interactive_box_info.dart';
+import 'package:craftor_movable/movable.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Craftor moveable',
+      title: 'Craftor movable',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  MoveableInfo info = MoveableInfo(
+  movableInfo info = movableInfo(
     size: const Size(100, 100),
     position: const Offset(10, 10),
     rotateAngle: 0,
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         body: Stack(
       children: [
-        CraftorMoveable(
+        CraftorMovable(
           isSelected: isSelected,
           // keepRatio: RawKeyboard.instance.keysPressed
           //     .contains(LogicalKeyboardKey.shiftLeft),

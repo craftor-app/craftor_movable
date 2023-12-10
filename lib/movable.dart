@@ -10,8 +10,8 @@ import 'helpers/scale_helper.dart';
 import 'models/interactive_box_info.dart';
 import 'models/scale_info.dart';
 
-class CraftorMoveable extends StatefulWidget {
-  const CraftorMoveable({
+class CraftorMovable extends StatefulWidget {
+  const CraftorMovable({
     super.key,
     required this.isSelected,
     required this.keepRatio,
@@ -31,24 +31,24 @@ class CraftorMoveable extends StatefulWidget {
 
   final bool keepRatio;
   final double scale;
-  final MoveableInfo scaleInfo;
+  final movableInfo scaleInfo;
   final Function()? onDoubleTap;
 
   final Function() onTapInside;
   final Function(PointerDownEvent e) onTapOutside;
   final Function(TapDownDetails)? onSecondaryTapDown;
 
-  final Function(MoveableInfo) onChange;
+  final Function(movableInfo) onChange;
   final Function()? onChangeEnd;
   final Function()? onChangeStart;
 
   final Widget child;
 
   @override
-  State<CraftorMoveable> createState() => _CraftorMoveableState();
+  State<CraftorMovable> createState() => _CraftorMovableState();
 }
 
-class _CraftorMoveableState extends State<CraftorMoveable> {
+class _CraftorMovableState extends State<CraftorMovable> {
   late double _width;
   late double _height;
 
@@ -79,7 +79,7 @@ class _CraftorMoveableState extends State<CraftorMoveable> {
   double _finalAngle = 0.0;
 
   @override
-  void didUpdateWidget(CraftorMoveable oldWidget) {
+  void didUpdateWidget(CraftorMovable oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.scaleInfo != widget.scaleInfo) {
@@ -531,7 +531,7 @@ class _CraftorMoveableState extends State<CraftorMoveable> {
     return height <= 0;
   }
 
-  MoveableInfo get _getCurrentBoxInfo => MoveableInfo(
+  movableInfo get _getCurrentBoxInfo => movableInfo(
         size: Size(_width, _height),
         position: Offset(_x, _y),
         rotateAngle: _finalAngle,
