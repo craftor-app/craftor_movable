@@ -414,14 +414,24 @@ class _CraftorMoveableState extends State<CraftorMoveable> {
                         top: -20,
                         child: DeferPointer(
                           child: GestureDetector(
+                            onPanStart: (details) {
+                              _startingAngle = _finalAngle;
+                            },
                             onPanUpdate: (details) {
+                              final center =
+                                  Rect.fromLTWH(0, 0, _width, _height).center;
+
+                              final newAngle = getAngleFromPoints(
+                                  center, details.localPosition);
                               setState(() {
-                                _finalAngle = getAngleFromPoints(
-                                        details.globalPosition,
-                                        widget.scaleInfo.rect.center) -
-                                    pi / 2;
+                                _finalAngle =
+                                    _startingAngle + newAngle + pi / 2;
                               });
 
+                              widget.onChange(_getCurrentBoxInfo);
+                            },
+                            onPanEnd: (details) {
+                              _prevAngle = _finalAngle;
                               widget.onChange(_getCurrentBoxInfo);
                             },
                             child: Stack(
@@ -554,4 +564,19 @@ class _CraftorMoveableState extends State<CraftorMoveable> {
 /// Get the angle radian between two points
 double getAngleFromPoints(Offset point1, Offset point2) {
   return atan2(point2.dy - point1.dy, point2.dx - point1.dx);
+}
+
+/// Rotate a point around an origin by an angle degree
+Offset rotatePoint(Offset point, Offset origin, double angle) {
+  final cosTheta = cos(angle * pi / 180);
+  final sinTheta = sin(angle * pi / 180);
+
+  final oPoint = point - origin;
+  final x = oPoint.dx;
+  final y = oPoint.dy;
+
+  final newX = x * cosTheta - y * sinTheta;
+  final newY = x * sinTheta + y * cosTheta;
+
+  return Offset(newX, newY) + origin;
 }
