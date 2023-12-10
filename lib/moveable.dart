@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unused_field
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:defer_pointer/defer_pointer.dart';
@@ -417,12 +418,14 @@ class _CraftorMoveableState extends State<CraftorMoveable> {
                               _startingAngle = _finalAngle;
                             },
                             onPanUpdate: (details) {
-                              double tempAngle = 0.0;
+                              final center =
+                                  Rect.fromLTWH(0, 0, _width, _height).center;
+
+                              final newAngle = getAngleFromPoints(
+                                  center, details.localPosition);
                               setState(() {
-                                tempAngle = details.localPosition.direction -
-                                    _startingAngle +
-                                    _prevAngle;
-                                _finalAngle = _startingAngle + tempAngle;
+                                _finalAngle =
+                                    _startingAngle + newAngle + pi / 2;
                               });
 
                               widget.onChange(_getCurrentBoxInfo);
@@ -556,4 +559,24 @@ class _CraftorMoveableState extends State<CraftorMoveable> {
 
     widget.onChange(_getCurrentBoxInfo);
   }
+}
+
+/// Get the angle radian between two points
+double getAngleFromPoints(Offset point1, Offset point2) {
+  return atan2(point2.dy - point1.dy, point2.dx - point1.dx);
+}
+
+/// Rotate a point around an origin by an angle degree
+Offset rotatePoint(Offset point, Offset origin, double angle) {
+  final cosTheta = cos(angle * pi / 180);
+  final sinTheta = sin(angle * pi / 180);
+
+  final oPoint = point - origin;
+  final x = oPoint.dx;
+  final y = oPoint.dy;
+
+  final newX = x * cosTheta - y * sinTheta;
+  final newY = x * sinTheta + y * cosTheta;
+
+  return Offset(newX, newY) + origin;
 }
