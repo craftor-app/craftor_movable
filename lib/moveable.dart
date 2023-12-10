@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unused_field
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:defer_pointer/defer_pointer.dart';
@@ -413,16 +414,11 @@ class _CraftorMoveableState extends State<CraftorMoveable> {
                         top: -20,
                         child: DeferPointer(
                           child: GestureDetector(
-                            onPanStart: (details) {
-                              _startingAngle = _finalAngle;
-                            },
                             onPanUpdate: (details) {
-                              double tempAngle = 0.0;
                               setState(() {
-                                tempAngle = details.localPosition.direction -
-                                    _startingAngle +
-                                    _prevAngle;
-                                _finalAngle = _startingAngle + tempAngle;
+                                _finalAngle = getAngleFromPoints(
+                                    details.globalPosition,
+                                    widget.scaleInfo.rect.center);
                               });
 
                               widget.onChange(_getCurrentBoxInfo);
@@ -556,4 +552,9 @@ class _CraftorMoveableState extends State<CraftorMoveable> {
 
     widget.onChange(_getCurrentBoxInfo);
   }
+}
+
+/// Get the angle radian between two points
+double getAngleFromPoints(Offset point1, Offset point2) {
+  return atan2(point2.dy - point1.dy, point2.dx - point1.dx);
 }
