@@ -417,14 +417,11 @@ class _CraftorMoveableState extends State<CraftorMoveable> {
                             onPanUpdate: (details) {
                               setState(() {
                                 _finalAngle = getAngleFromPoints(
-                                    details.globalPosition,
-                                    widget.scaleInfo.rect.center);
+                                        details.globalPosition,
+                                        widget.scaleInfo.rect.center) -
+                                    pi / 2;
                               });
 
-                              widget.onChange(_getCurrentBoxInfo);
-                            },
-                            onPanEnd: (details) {
-                              _prevAngle = _finalAngle;
                               widget.onChange(_getCurrentBoxInfo);
                             },
                             child: Stack(
