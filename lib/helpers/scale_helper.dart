@@ -37,8 +37,9 @@ class ScaleHelper {
 
           // left
           var rotationalOffsetTL = Offset(
-                  cos(rotateAngle) + 1, // x
-                  sin(rotateAngle)) *
+                cos(rotateAngle) + 1, // x
+                sin(rotateAngle),
+              ) *
               deltaWidthTL /
               2;
           // top
@@ -53,15 +54,15 @@ class ScaleHelper {
           updatedYPosition += rotationalOffsetTL.dy + rotationalOffset2TL.dy;
 
           break;
+
         case ScaleDirection.bottomLeft:
           double aspectRatioBL = updatedWidth / updatedHeight;
           double newHeightBL = updatedHeight + dy;
           double newWidthBL = newHeightBL * aspectRatioBL;
-          double deltaBL = updatedWidth - newWidthBL;
+          double deltaBL = updatedHeight - newHeightBL;
 
           updatedHeight = newHeightBL > 0 ? newHeightBL : 0;
           updatedWidth = newWidthBL > 0 ? newWidthBL : 0;
-          // updatedXPosition += deltaBL;
 
           // left
           var rotationalOffsetBL = Offset(
@@ -83,20 +84,50 @@ class ScaleHelper {
 
           break;
 
-        case ScaleDirection.topRight:
-          double newHeight = updatedHeight - dy;
-          double scale = newHeight / updatedHeight;
-          double newWidth = updatedWidth * scale;
+        case ScaleDirection.bottomRight:
+          double newHeightBR = updatedHeight + dy;
+          double aspectRatioBR = updatedWidth / updatedHeight;
+          double newWidthBR = newHeightBR * aspectRatioBR;
+          double deltaBR = newWidthBR - updatedWidth;
 
-          updatedHeight = newHeight > 0 ? newHeight : 0;
-          updatedWidth = newWidth > 0 ? newWidth : 0;
+          updatedWidth = newWidthBR > 0 ? newWidthBR : 0;
+          updatedHeight = newHeightBR > 0 ? newHeightBR : 0;
+
+          // right
+          var rotationalOffsetBR = Offset(
+                cos(rotateAngle) - 1, // x
+                sin(rotateAngle), // y
+              ) *
+              deltaBR /
+              2;
+          // bottom
+          var rotationalOffset2BR = Offset(
+                -sin(rotateAngle),
+                cos(rotateAngle) - 1,
+              ) *
+              dy /
+              2;
+
+          updatedXPosition += rotationalOffsetBR.dx + rotationalOffset2BR.dx;
+          updatedYPosition += rotationalOffsetBR.dy + rotationalOffset2BR.dy;
+
+          break;
+
+        case ScaleDirection.topRight:
+          double newHeightBR = updatedHeight - dy;
+          double aspectRatioBR = updatedWidth / updatedHeight;
+          double newWidthBR = newHeightBR * aspectRatioBR;
+          double deltaBR = newWidthBR - updatedWidth;
+
+          updatedWidth = newWidthBR > 0 ? newWidthBR : 0;
+          updatedHeight = newHeightBR > 0 ? newHeightBR : 0;
 
           // right
           var rotationalOffset = Offset(
                 cos(rotateAngle) - 1, // x
                 sin(rotateAngle), // y
               ) *
-              dx /
+              deltaBR /
               2;
           // top
           var rotationalOffset2 = Offset(
@@ -110,35 +141,6 @@ class ScaleHelper {
           updatedYPosition += rotationalOffset.dy + rotationalOffset2.dy;
 
           break;
-
-        case ScaleDirection.bottomRight:
-          double newHeight = updatedHeight + dy;
-          // double newWidth = updatedWidth + dx;
-          double scale = newHeight / updatedHeight;
-
-          updatedWidth = updatedWidth * scale;
-          updatedHeight = updatedHeight * scale;
-
-          // right
-          var rotationalOffset = Offset(
-                cos(rotateAngle) - 1, // x
-                sin(rotateAngle), // y
-              ) *
-              dx /
-              2;
-          // bottom
-          var rotationalOffset2 = Offset(
-                -sin(rotateAngle),
-                cos(rotateAngle) - 1,
-              ) *
-              dy /
-              2;
-
-          updatedXPosition += rotationalOffset.dx + rotationalOffset2.dx;
-          updatedYPosition += rotationalOffset.dy + rotationalOffset2.dy;
-
-          break;
-
         default:
           break;
       }
@@ -150,6 +152,55 @@ class ScaleHelper {
         y: updatedYPosition,
       );
     }
+
+    // // is circle, scale from center
+    // if (options.shape == Shape.circle) {
+    //   updatedHeight = updatedWidth;
+    //   switch (options.scaleDirection) {
+    //     case ScaleDirection.topLeft:
+    //       final double mid = (dx + dy) / 2;
+
+    //       updatedWidth = updatedWidth - 2 * mid;
+    //       updatedHeight = updatedHeight - 2 * mid;
+    //       updatedXPosition = updatedXPosition + mid;
+    //       updatedYPosition = updatedYPosition + mid;
+    //       break;
+    //     case ScaleDirection.bottomLeft:
+    //       final double mid = ((dx * -1) + dy) / 2;
+
+    //       updatedHeight = updatedHeight + 2 * mid;
+    //       updatedWidth = updatedWidth + 2 * mid;
+    //       updatedXPosition -= mid;
+    //       updatedYPosition -= mid;
+    //       break;
+
+    //     case ScaleDirection.topRight:
+    //       final double mid = (dx + (dy * -1)) / 2;
+
+    //       updatedWidth = updatedWidth + 2 * mid;
+    //       updatedHeight = updatedHeight + 2 * mid;
+    //       updatedXPosition -= mid;
+    //       updatedYPosition -= mid;
+    //       break;
+    //     case ScaleDirection.bottomRight:
+    //       final double mid = (dx + dy) / 2;
+
+    //       updatedHeight = updatedHeight + 2 * mid;
+    //       updatedWidth = updatedWidth + 2 * mid;
+    //       updatedXPosition -= mid;
+    //       updatedYPosition -= mid;
+    //       break;
+
+    //     default:
+    //   }
+
+    //   return ScaleInfo(
+    //     width: updatedWidth > 0 ? updatedWidth : 0,
+    //     height: updatedHeight > 0 ? updatedHeight : 0,
+    //     x: updatedXPosition,
+    //     y: updatedYPosition,
+    //   );
+    // }
 
     ///
     /// Rotational offset
